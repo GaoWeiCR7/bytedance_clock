@@ -36,7 +36,27 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text("Clock"),
         ),
         body: Center(
-          child: ClockPage(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            verticalDirection: VerticalDirection.up,
+            children: <Widget>[
+              new ButtonBar(
+                children: <Widget>[
+                  new FlatButton(onPressed: () {}, child: new Text('闹钟'),textColor: Colors.white,minWidth: 100,height: 60,),
+                  Spacer(),
+                  new FlatButton(onPressed: () {}, child: new Text('秒表'),textColor: Colors.white,minWidth: 100,height: 60,),
+                  Spacer(),
+                  new FlatButton(onPressed: () {}, child: new Text('计时器'),textColor: Colors.white,minWidth: 100,height: 60,),
+                ],
+                alignment: MainAxisAlignment.center,
+              ),
+              SizedBox(height: 50,),
+              Center(
+                  child: ClockPage(),
+              ),
+        ]
+          )
         ));
   }
 }
