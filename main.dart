@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
   PageController _pageController;
   List<Widget> _pages;
+  List<NavigationIconView> _navigationViews;
 
   @override
   // ignore: must_call_super
@@ -44,12 +45,48 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       Container(color: Colors.red,),
       Container(color: Colors.blue,),
+      Container(color: Colors.green,),
     ];
-
+    _navigationViews = [
+      NavigationIconView(
+        title: "时钟",
+        icon: Icon(Icons.ac_unit),
+        activeIcon: Icon(Icons.access_alarm),
+      ),
+      NavigationIconView(
+        title: "闹钟",
+        icon: Icon(Icons.ac_unit),
+        activeIcon: Icon(Icons.access_alarm),
+      ),
+      NavigationIconView(
+        title: "秒表",
+        icon: Icon(Icons.ac_unit),
+        activeIcon: Icon(Icons.access_alarm),
+      ),
+      NavigationIconView(
+        title: "计时器",
+        icon: Icon(Icons.ac_unit),
+        activeIcon: Icon(Icons.access_alarm),
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final BottomNavigationBar botNavBar = BottomNavigationBar(
+      items: _navigationViews.map((NavigationIconView view){return view.item;}).toList(),
+      currentIndex: _currentIndex,
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.white,
+      unselectedItemColor: Colors.black,
+      selectedItemColor: Colors.blue,
+      onTap: (int index){
+        setState(() {
+          _currentIndex = index;
+          _pageController.animateToPage(_currentIndex, duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        });
+      },
+    );
     return Scaffold(
         appBar: AppBar(
           title: Text("Clock"),
@@ -61,11 +98,33 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           controller: _pageController,
           itemCount: _pages.length,
+          onPageChanged: (int index){
+              setState(() {
+                _currentIndex = index;
+              });
+          },
         ),
+      bottomNavigationBar: botNavBar,
     );
   }
 }
 
+class NavigationIconView{
+  final String _title;
+  final Widget _icon;
+  final Widget _activeIcon;
+  final BottomNavigationBarItem item;
+
+  NavigationIconView({Key key, String title, Widget icon, Widget activeIcon}) :
+        _title= title,
+        _icon = icon,
+        _activeIcon = activeIcon,
+        item = BottomNavigationBarItem(
+          icon: icon,
+          activeIcon: activeIcon,
+          title: Text(title),
+  );
+}
 /*
 body: Center(
           child: Column(
