@@ -28,6 +28,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+  PageController _pageController;
+  List<Widget> _pages;
+
+  @override
+  // ignore: must_call_super
+  void initState()
+  {
+    super.initState();
+    _pageController = new PageController(initialPage: _currentIndex);
+    _pages = [
+      Center(
+        child: ClockPage(),
+      ),
+      Container(color: Colors.red,),
+      Container(color: Colors.blue,),
+    ];
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +54,20 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text("Clock"),
         ),
-        body: Center(
+        body: PageView.builder(
+            // ignore: missing_return
+            itemBuilder: (BuildContext context,int index){
+              return _pages[index];
+            },
+          controller: _pageController,
+          itemCount: _pages.length,
+        ),
+    );
+  }
+}
+
+/*
+body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,6 +89,5 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
         ]
           )
-        ));
-  }
-}
+        )
+ */
