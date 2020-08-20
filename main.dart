@@ -1,5 +1,6 @@
 import 'package:hello_flutter/clock.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_flutter/stopwatch.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,13 +39,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState()
   {
     super.initState();
-    _pageController = new PageController(initialPage: _currentIndex);
+    _pageController = new PageController(
+        initialPage: _currentIndex,
+        keepPage: true,
+    );
     _pages = [
       Center(
         child: ClockPage(),
       ),
-      Container(color: Colors.red,),
       Container(color: Colors.blue,),
+      Center(
+        child: StopWatchPage(),
+      ),
       Container(color: Colors.green,),
     ];
     _navigationViews = [

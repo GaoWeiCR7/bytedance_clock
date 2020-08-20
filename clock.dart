@@ -65,8 +65,6 @@ class ClockPainter extends CustomPainter {
   final double radius;
   List<Offset> secondsOffset = [];
   final DateTime datetime;
-  TextPainter textPainter;
-  double angle;
   double borderWidth;
 
   ClockPainter(this.datetime,
@@ -83,12 +81,6 @@ class ClockPainter extends CustomPainter {
           sin(degToRad(6 * i - 90)) * secondDistance + radius);
       secondsOffset.add(offset);
     }
-
-    textPainter = new TextPainter(
-      textAlign: TextAlign.center,
-      textDirection: TextDirection.rtl,
-    );
-    angle = degToRad(360 / 60);
   }
 
   @override
@@ -136,7 +128,9 @@ class ClockPainter extends CustomPainter {
 
 
     pb.pushStyle(ui.TextStyle(color: Colors.white));
-    pb.addText('${hour>9?hour:'0'+hour.toString()}:${minute>9?minute:'0'+minute.toString()}');
+    String hourStr = hour.toString().padLeft(2,'0');
+    String minStr = minute.toString().padLeft(2,'0');
+    pb.addText('$hourStr:$minStr');
     ParagraphConstraints pc = ParagraphConstraints(width: 2*radius-80);
     Paragraph paragraph = pb.build()..layout(pc);
     Offset offset = Offset(radius-110, radius-40);
