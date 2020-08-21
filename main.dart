@@ -1,5 +1,6 @@
 import 'package:hello_flutter/clock.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_flutter/alarm.dart';
 import 'package:hello_flutter/stopwatch.dart';
 
 void main() => runApp(MyApp());
@@ -47,7 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
       Center(
         child: ClockPage(),
       ),
-      Container(color: Colors.blue,),
+      Center(
+        child: AlarmPage(),
+      ),
       Center(
         child: StopWatchPage(),
       ),
