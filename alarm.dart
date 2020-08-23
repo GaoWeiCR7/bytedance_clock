@@ -86,9 +86,15 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
     super.build(context);
     return Scaffold(
       appBar: AppBar(
+
+        //上面的任务栏，主要是一个‘+’action
+
         actions: [
           IconButton(
               icon: Icon(Icons.add),
+
+              //点击‘+’action弹出对话框
+
               onPressed: (){
                 int inhour = -1;
                 int inminute = -1;
@@ -101,6 +107,12 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
+
+                            //下面两个Row是接受用户输入的对话框
+                            //hour:_______
+                            //minute:_______
+
+
                             Row(
                               children: <Widget>[
                                 Text('hour'),
@@ -165,6 +177,9 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
                           ],
                         ),
                       ),
+
+                      //弹出的对话框右下角确定button，点击之后确定设置闹钟
+
                       actions: <Widget>[
                         FlatButton(
                             onPressed:(){
@@ -191,6 +206,9 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
           String minStr = minute.toString().padLeft(2,'0');
 
           return Container(
+
+            //listview组件，即每一个闹钟行的显示
+
               height: 60.0,
               padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
@@ -205,12 +223,18 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+
+                  //显示闹钟时间，即每一个item左边的时间
+
                   Text(
                     hourStr+':'+minStr,
                     style: TextStyle(fontSize: 30.0),
                   ),
                   Spacer(),
                   FlatButton(
+
+                    //每一个item右边的删除按钮
+
                     height: 40,
                     onPressed: (){
                       itemList.remove(Offset(hour.toDouble(),minute.toDouble()));
