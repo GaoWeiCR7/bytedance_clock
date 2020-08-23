@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AlarmPage extends StatefulWidget{
   @override
@@ -9,27 +10,74 @@ class AlarmPage extends StatefulWidget{
 
 class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin<AlarmPage>{
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   List<Offset> itemList = [];
 
   DateTime datetime;
   Timer timer;
 
+  bool pressed = false;
+
+  DateTime lastTime = DateTime.now();
+  DateTime curTime;
+
+  Future onSelectNotification(String payload) {
+    debugPrint("payload : $payload");
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text('Notification'),
+        content: new Text('$payload'),
+        actions: <Widget>[
+          FlatButton(
+              onPressed: (){
+                pressed = true;
+                Navigator.of(context).pop();
+              },
+              child: Text('OK')
+          )
+        ],
+      ),
+    );
+  }
+
+  showNotification(String str) async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High,importance: Importance.Max
+    );
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Alarm', '$str', platform,
+        payload: '$str');
+  }
+
+
   @override
   void initState()
   {
     super.initState();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings, onSelectNotification: onSelectNotification);
     datetime = DateTime.now();
-    timer = Timer.periodic(Duration(seconds: 1), (timer){
+    timer = Timer.periodic(Duration(seconds: 5), (timer){
       datetime = DateTime.now();
+      curTime = DateTime.now();
       bool flag = itemList.contains(Offset(datetime.hour.toDouble(), datetime.minute.toDouble()));
       if(flag)
-        /*Fluttertoast.showToast(
-          msg: "alarm!",
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white
-        );*/
-        print(11111);
+      {
+        if(lastTime.year!=curTime.year||lastTime.month!=curTime.month||lastTime.day!=curTime.day||lastTime.hour!=curTime.hour||lastTime.minute!=curTime.minute)
+        {
+          pressed = false;
+          lastTime = curTime;
+        }
+        if(!pressed)
+          showNotification(datetime.hour.toString().padLeft(2,'0')+':'+datetime.minute.toString().padLeft(2,'0'));
+      }
     });
   }
 
@@ -120,7 +168,7 @@ class AlarmPageState extends State<AlarmPage> with AutomaticKeepAliveClientMixin
                       actions: <Widget>[
                         FlatButton(
                             onPressed:(){
-                              if(inhour>=0&&inhour<24&&inminute>=0&&inminute<60)
+                              if(inhour>=0&&inhour<24&&inminute>=0&&inminute<60&&!itemList.contains(Offset(inhour.toDouble(),inminute.toDouble())))
                                 itemList.add(Offset(inhour.toDouble(),inminute.toDouble()));
                               Navigator.of(context).pop();
                               setState(() {
